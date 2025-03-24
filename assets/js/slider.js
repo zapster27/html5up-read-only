@@ -1,34 +1,34 @@
-let currentIndex = 0;
-const totalSlides = 3;
+let currentSlideIndex = 0;
 
-window.addEventListener("DOMContentLoaded", () => {
-  const track = document.getElementById("sliderTrack");
-  const dots = document.querySelectorAll(".slider-dots .dot");
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = document.querySelectorAll(".slider-track img");
+  const dots = document.querySelectorAll(".dot");
 
-  function goToSlide(index) {
-    currentIndex = index;
-    track.style.transform = `translateX(-${index * 100}%)`;
-    updateDots();
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle("active", i === index);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("active", i === index);
+    });
+
+    currentSlideIndex = index;
   }
 
-  function updateDots() {
-    dots.forEach(dot => dot.classList.remove("active"));
-    dots[currentIndex].classList.add("active");
-  }
+  // Auto slide (optional)
+  setInterval(() => {
+    currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+    showSlide(currentSlideIndex);
+  }, 4000);
 
-  function autoSlide() {
-    currentIndex = (currentIndex + 1) % totalSlides;
-    goToSlide(currentIndex);
-  }
-
-  // Set up click events for dots
+  // Dot click
   dots.forEach((dot, index) => {
-    dot.addEventListener("click", () => goToSlide(index));
+    dot.addEventListener("click", () => {
+      showSlide(index);
+    });
   });
 
-  // Start automatic sliding
-  setInterval(autoSlide, 4000);
-
-  // Initialize first dot as active
-  goToSlide(0);
+  // Show initial
+  showSlide(currentSlideIndex);
 });
